@@ -1,12 +1,15 @@
 const express = require('express');
-const { addUserController, updateUserController, deleteUserController, getUserController, loginController } = require('../controllers/userContoller');
+const { addUserController, updateUserController, deleteUserController, getUserController, loginController, verifyUser, logoutController } = require('../controllers/userContoller');
 const userUpload = require('../multerConfig/UserImgConfig');
+const userVerifyMiddleware = require('../middleware/userMiddleware');
 const router = express.Router();
 
-router.post("/user", userUpload.single('userprofile'), addUserController);
+router.post("/user", userUpload.single('userProfile'), addUserController);
 router.post("/login", loginController);
-router.get("/user", getUserController);
-router.delete("/user/:id", deleteUserController);
-router.put("/user/:id", updateUserController);
+router.get('/userVerify', userVerifyMiddleware, verifyUser);
+router.get('/logout', userVerifyMiddleware, logoutController);
+router.get("/user", userVerifyMiddleware, getUserController);
+router.delete("/user/:id", userVerifyMiddleware, deleteUserController);
+router.put("/user/:id", userVerifyMiddleware, updateUserController);
 
 module.exports = router;

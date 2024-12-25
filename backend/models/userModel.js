@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    userprofile: {
+    userProfile: {
         type: String,
         required: true
     },
