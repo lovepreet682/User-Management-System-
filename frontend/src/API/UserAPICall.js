@@ -11,6 +11,12 @@ export const UserLoginAPI = async (data, header) => {
     return await commonrequest("POST", `${BASE_URL}${Login_URL}`, data, header);
 }
 
+// USER List API || GET
+export const UserListAPI = async (data, header) => {
+    return await commonrequest("GET", `${BASE_URL}${USER_URL}`, "", header);
+}
+
+
 // USER Verify API || GET
 export const UserVerifiedLoginAPI = async (data, header) => {
     return await commonrequest("GET", `${BASE_URL}${VerifyUser_URL}`, "", header);

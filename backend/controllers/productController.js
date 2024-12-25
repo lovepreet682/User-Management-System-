@@ -1,4 +1,6 @@
 const productModel = require("../models/productsModel");
+const cloudinary = require("../cloudinary/cloudinarConfig")
+
 
 // Add Product
 exports.addProductController = async (req, res) => {
@@ -7,11 +9,13 @@ exports.addProductController = async (req, res) => {
     if (!productName || !productDescription || !productPrice || !productCategory) {
         res.status(400).json({ error: "all fileds are required" })
     }
-    const upload = req.file ? `/images/userImage/${req.file.filename}` : '';
 
+    // File upload path
+    const file = req.file?.path;
+    const upload = await cloudinary.uploader.upload(file);
     try {
         const newproduct = new productModel({
-            productName, productCategory, productDescription, productPrice, productImg: upload
+            productName, productCategory, productDescription, productPrice, productImg: upload.secure_url
         })
 
         await newproduct.save();

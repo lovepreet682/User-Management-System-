@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addProductController } from '../../Redux/Slice/UserSlice';
 
 function AddProduct() {
     const dispatch = useDispatch();
+    const { loading } = useSelector((state) => state.User);
     const [inputValue, setInputValue] = useState({ productName: "", productDescription: "", productPrice: "", productCategory: "" })
     const [productImg, setProductImg] = useState('');
 
@@ -86,7 +87,15 @@ function AddProduct() {
                             <textarea cols={1} className="form-control" onChange={handleChange} value={inputValue.productDescription} type="text" name="productDescription" placeholder="Enter Your Name" />
                         </div>
 
-                        <button className="btn btn-primary" onClick={handleSubmit}>Add Product</button>
+                        {loading ? <>
+                            <div className="text-center">
+                                <div className="spinner-border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </> : <>
+                            <button className="btn btn-primary" onClick={handleSubmit}>Add Product</button>
+                        </>}
                     </form>
                 </div>
             </section>

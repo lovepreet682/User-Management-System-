@@ -52,17 +52,23 @@ function HeaderSection() {
                                         <Link class="nav-link active" aria-current="page" to="/home">Home</Link>
                                     </li>
 
-                                    <li class="nav-item">
-                                        <Link class="nav-link" to="/addproduct">Add Product</Link>
-                                    </li>
+                                    {/* For Supervisor  */}
+                                    {userVerifySlice[0]?.userRole === "Admin" && (
+                                        <>
+                                            <li class="nav-item">
+                                                <Link class="nav-link" to="/addproduct">Add Product</Link>
+                                            </li>
 
-                                    <li class="nav-item">
-                                        <Link class="nav-link" to="/users">Users</Link>
-                                    </li>
+                                            <li class="nav-item">
+                                                <Link class="nav-link" to="/users">Users</Link>
+                                            </li>
 
-                                    <li class="nav-item">
-                                        <Link class="nav-link" to="/product">Roles</Link>
-                                    </li>
+                                            <li class="nav-item">
+                                                <Link class="nav-link" to="/product">Roles</Link>
+                                            </li>
+                                        </>
+                                    )}
+
 
                                     <li class="nav-item">
                                         <Link class="nav-link" to="/product">Change Profile</Link>

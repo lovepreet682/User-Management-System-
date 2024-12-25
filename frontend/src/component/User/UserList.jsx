@@ -1,6 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUserListController } from '../../Redux/Slice/UserSlice';
 
 function UserList() {
+    const dispatch = useDispatch();
+    const { getUserListSlice, loading } = useSelector((state) => state.User);
+
+    console.log("getUserListSlice", getUserListSlice);
+
+    const userList = () => {
+        dispatch(getUserListController());
+    }
+
+    useEffect(() => {
+        userList();
+    }, [])
     return (
         <>
             <div className="container pt-3">
@@ -17,17 +31,36 @@ function UserList() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th>1</th>
-                            <td>Lovepreet</td>
-                            <td>lovepreet@gmail.com</td>
-                            <td>Admin</td>
-                            <td><img src='/reactjs.png' style={{ width: "35px" }} /></td>
-                            <td>
-                                <button className='btn btn-danger'>Delete</button>
-                                <button className='btn btn-success mx-2'>Update</button>
-                            </td>
-                        </tr>
+                        {loading ? <>
+                            <div className="text-center">
+                                <div className="spinner-border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </> : <>
+                            {getUserListSlice?.users?.length > 0 ? <>
+                                {getUserListSlice?.users?.map((user, index) => (
+                                    <>
+                                        <tr>
+                                            <td>{index + 1}</td>
+                                            <td>{user.name}</td>
+                                            <td>{user.email}</td>
+                                            <td>{user.userRole}</td>
+                                            <td><img src={user.userProfile} style={{ width: "35px" }} /></td>
+                                            <td>
+                                                <button className='btn btn-danger'>Delete</button>
+                                                <button className='btn btn-success mx-2'>Update</button>
+                                            </td>
+                                        </tr>
+                                    </>
+                                ))}
+                            </> : <>
+                                <div className="text-center">
+                                    <p>No User available to display.</p>
+                                </div>
+                            </>}
+                        </>}
+
 
                     </tbody>
                 </table>

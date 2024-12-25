@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
-import { addProductAPI, UserLoginAPI, userLogoutAPI, UserRegisterAPI, UserVerifiedLoginAPI } from "../../API/UserAPICall";
+import { addProductAPI, getProductAPI, UserListAPI, UserLoginAPI, userLogoutAPI, UserRegisterAPI, UserVerifiedLoginAPI } from "../../API/UserAPICall";
 
 // Add User Controller
 export const addUserController = createAsyncThunk("addUserController", async (data) => {
@@ -65,6 +65,20 @@ export const userVerifyController = createAsyncThunk("userVerifyController", asy
     }
 })
 
+// GET User List 
+export const getUserListController = createAsyncThunk("getUserListController", async () => {
+    try {
+        const response = await UserListAPI();
+        if (response.status === 200) {
+            return response.data;
+        }
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+})
+
+// ------------------------------------- PRODUCT------------------------------------------
 
 // Add Product 
 export const addProductController = createAsyncThunk("addProductController", async (data) => {
@@ -84,7 +98,7 @@ export const addProductController = createAsyncThunk("addProductController", asy
 // GET Product 
 export const getProductController = createAsyncThunk("getProductController", async () => {
     try {
-        const response = await addProductAPI();
+        const response = await getProductAPI();
         if (response.status === 201) {
             return response.data;
         }
@@ -100,6 +114,7 @@ export const UserSlice = createSlice({
     name: "UserSlice",
     initialState: {
         addUserSlice: [],
+        getUserListSlice: [],
         loginUserSlice: [],
         logoutuserSlice: [],
         userVerifySlice: [],
@@ -152,6 +167,19 @@ export const UserSlice = createSlice({
             .addCase(addUserController.fulfilled, (state, action) => {
                 state.loading = false;
                 state.addUserSlice = action.payload;
+            })
+
+            // GET User's list
+            .addCase(getUserListController.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(getUserListController.rejected, (state, action) => {
+                state.loading = false,
+                    state.error = action;
+            })
+            .addCase(getUserListController.fulfilled, (state, action) => {
+                state.loading = false;
+                state.getUserListSlice = action.payload;
             })
 
             // Login User
