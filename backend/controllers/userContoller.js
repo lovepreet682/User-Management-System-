@@ -28,11 +28,8 @@ exports.addUserController = async (req, res) => {
 
         // Create new user
         const newUser = new userModel({
-            name,
-            email,
-            userProfile: upload.secure_url,
-            userRole,
-            password: hashedPassword,
+            name, email, userProfile: upload.secure_url,
+            userRole, password: hashedPassword,
         });
 
         await newUser.save();
@@ -134,21 +131,14 @@ exports.deleteUserController = async (req, res) => {
 
 // Update User
 exports.updateUserController = async (req, res) => {
-    const { userId } = req.params;
-    const { name, email, userprofile, password } = req.body;
+
+    const { id } = req.params;
+    const { name, email } = req.body;
 
     try {
-        const updatedFields = {
-            name,
-            email,
-            userprofile,
-        };
+        const updatedFields = { name, email };
 
-        if (password) {
-            updatedFields.password = await bcrypt.hash(password, 10);  // Hash new password if provided
-        }
-
-        const updatedUser = await userModel.findByIdAndUpdate(userId, updatedFields, { new: true });
+        const updatedUser = await userModel.findByIdAndUpdate(id, updatedFields, { new: true });
         if (!updatedUser) {
             return res.status(404).json({ message: 'User not found' });
         }

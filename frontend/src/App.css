@@ -159,7 +159,6 @@ p a:hover {
   text-overflow: ellipsis;
 }
 
-
 @media (max-width: 800px) {
   nav {
     overflow: hidden;

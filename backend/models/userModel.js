@@ -29,10 +29,7 @@ const userSchema = new mongoose.Schema({
         }
     }],
 
-    // for forgotpassword
-    verifyToken: {
-        type: String
-    }
+
 }, { timestamps: true });
 
 userSchema.methods.generateToken = async function (userId) {

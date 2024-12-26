@@ -1,4 +1,4 @@
-import { BASE_URL, Login_URL, LOGOUT_URL, product, USER_URL, VerifyUser_URL } from "./API_URL";
+import { BASE_URL, Login_URL, LOGOUT_URL, product, User_Update, USER_URL, VerifyUser_URL } from "./API_URL";
 import { commonrequest } from "./CommonRequest";
 
 // Add User API || POST
@@ -24,8 +24,25 @@ export const UserVerifiedLoginAPI = async (data, header) => {
 
 // User Logout API || GET
 export const userLogoutAPI = async (data, header) => {
-    return await commonrequest("GET", `${BASE_URL}${LOGOUT_URL}`, "", header);
+    return await commonrequest("GET", `${BASE_URL}${LOGOUT_URL}`, data, header);
 }
+
+// USER List API || UPDATE
+export const UpdateUserAPI = async (data, header) => {
+    const updatedata = { name: data.name, email: data.email };
+    return await commonrequest("PUT", `${BASE_URL}${USER_URL}/${data.id}`, updatedata, header);
+}
+
+// USER List API || DELETE
+export const DeleteUserAPI = async (data, header) => {
+    return await commonrequest("DELETE", `${BASE_URL}${USER_URL}`, data, header);
+}
+
+
+
+
+
+// ----------- PRODUCT LIST ----------------------------
 
 // Add Product || POST
 export const addProductAPI = async (data, header) => {

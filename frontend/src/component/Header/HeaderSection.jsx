@@ -7,8 +7,6 @@ function HeaderSection() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { userVerifySlice, loginUserSlice } = useSelector((state) => state.User);
-    console.log("userVerifySlice", userVerifySlice);
-
 
     // User Logged in
     const userLoggedIn = () => {
@@ -64,14 +62,14 @@ function HeaderSection() {
                                             </li>
 
                                             <li class="nav-item">
-                                                <Link class="nav-link" to="/product">Roles</Link>
+                                                <Link class="nav-link" to="/role">Roles</Link>
                                             </li>
                                         </>
                                     )}
 
 
                                     <li class="nav-item">
-                                        <Link class="nav-link" to="/product">Change Profile</Link>
+                                        <Link class="nav-link" to="/changeprofile">Change Profile</Link>
                                     </li>
 
                                     <li class="nav-item">

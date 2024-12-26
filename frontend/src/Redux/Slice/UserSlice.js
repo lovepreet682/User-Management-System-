@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
-import { addProductAPI, getProductAPI, UserListAPI, UserLoginAPI, userLogoutAPI, UserRegisterAPI, UserVerifiedLoginAPI } from "../../API/UserAPICall";
+import { addProductAPI, DeleteUserAPI, getProductAPI, UpdateUserAPI, UserListAPI, UserLoginAPI, userLogoutAPI, UserRegisterAPI, UserVerifiedLoginAPI } from "../../API/UserAPICall";
 
 // Add User Controller
 export const addUserController = createAsyncThunk("addUserController", async (data) => {
@@ -18,12 +18,48 @@ export const addUserController = createAsyncThunk("addUserController", async (da
     }
 })
 
+// Update User Controller
+export const updateUserController = createAsyncThunk("updateUserController", async (data) => {
+    try {
+        const response = await UpdateUserAPI(data);
+        if (response.status === 200) {
+            toast.success("User Updated Successfully");
+            localStorage.setItem("userdetails", JSON.stringify(response.data.user));
+            return response.data;
+        } else {
+            toast.error(response.response.data.error);
+        }
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+})
+
+
+// Delete User Controller
+export const deleteUserController = createAsyncThunk("deleteUserController", async (data) => {
+    try {
+        const response = await DeleteUserAPI(data);
+        if (response.status === 201) {
+            toast.success("User Deleted Successfully");
+            return response.data;
+        } else {
+            toast.error(response.response.data.error);
+        }
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+})
+
 // Login User Controller
 export const loginUserController = createAsyncThunk("loginUserController", async (data) => {
     try {
         const response = await UserLoginAPI(data);
         if (response.status === 200) {
             localStorage.setItem("usertoken", response.data.token);
+            localStorage.setItem("userdetails", JSON.stringify(response.data.user));
+
             toast.success("User Login In Successfully");
             return response.data;
         } else {
@@ -118,6 +154,8 @@ export const UserSlice = createSlice({
         loginUserSlice: [],
         logoutuserSlice: [],
         userVerifySlice: [],
+        updateUserSlice: [],
+        deleteUserSlice: [],
 
 
         // product 
@@ -180,6 +218,32 @@ export const UserSlice = createSlice({
             .addCase(getUserListController.fulfilled, (state, action) => {
                 state.loading = false;
                 state.getUserListSlice = action.payload;
+            })
+
+            // Update User
+            .addCase(updateUserController.pending, (state) => {
+                state.status = true
+            })
+            .addCase(updateUserController.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(updateUserController.fulfilled, (state, action) => {
+                state.loading = false;
+                state.updateUserSlice = action.payload;
+            })
+
+            // Delete User
+            .addCase(deleteUserController.pending, (state) => {
+                state.status = true
+            })
+            .addCase(deleteUserController.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(deleteUserController.fulfilled, (state, action) => {
+                state.loading = false;
+                state.deleteUserSlice = action.payload;
             })
 
             // Login User
