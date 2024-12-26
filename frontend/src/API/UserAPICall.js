@@ -35,7 +35,7 @@ export const UpdateUserAPI = async (data, header) => {
 
 // USER List API || DELETE
 export const DeleteUserAPI = async (data, header) => {
-    return await commonrequest("DELETE", `${BASE_URL}${USER_URL}`, data, header);
+    return await commonrequest("DELETE", `${BASE_URL}${USER_URL}/${data.id}`, {}, header);
 }
 
 
@@ -54,6 +54,8 @@ export const getProductAPI = async (data, header) => {
 
 // DELETE Product || DELETE
 export const deleteProductAPI = async (data, header) => {
+    console.log("dat@@@@@@@@@@@@@@@", data);
+
     return await commonrequest("DELETE", `${BASE_URL}${product}/${data.id}`, {}, header);
 }
 

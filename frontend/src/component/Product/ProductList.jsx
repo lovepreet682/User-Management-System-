@@ -37,7 +37,7 @@ function ProductList() {
 
     const handleDeletClose = () => { setDeleteModalOpen(false) }
 
-    const handleDeleteProduct = (deleteProductID) => {
+    const handleDeleteProduct = () => {
         const data = {
             id: deleteProductID
         }
@@ -49,7 +49,7 @@ function ProductList() {
         }).catch((err) => {
             console.log(err);
 
-        });;
+        });
 
     }
 

@@ -40,7 +40,9 @@ export const updateUserController = createAsyncThunk("updateUserController", asy
 export const deleteUserController = createAsyncThunk("deleteUserController", async (data) => {
     try {
         const response = await DeleteUserAPI(data);
-        if (response.status === 201) {
+        console.log("3456765435678", response);
+
+        if (response.status === 200) {
             toast.success("User Deleted Successfully");
             return response.data;
         } else {
@@ -149,8 +151,6 @@ export const deleteProductController = createAsyncThunk("deleteProductController
 
     try {
         const response = await deleteProductAPI(data);
-        console.log("response", response);
-
         if (response.status === 200) {
             toast.success("Product Deleted Successfully");
             return response.data;
