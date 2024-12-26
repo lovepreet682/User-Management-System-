@@ -64,6 +64,10 @@ function HeaderSection() {
                                             <li class="nav-item">
                                                 <Link class="nav-link" to="/role">Roles</Link>
                                             </li>
+
+                                            <li class="nav-item">
+                                                <Link class="nav-link" to="/productlist">Product List</Link>
+                                            </li>
                                         </>
                                     )}
 

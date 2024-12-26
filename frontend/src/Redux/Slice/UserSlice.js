@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
-import { addProductAPI, DeleteUserAPI, getProductAPI, UpdateUserAPI, UserListAPI, UserLoginAPI, userLogoutAPI, UserRegisterAPI, UserVerifiedLoginAPI } from "../../API/UserAPICall";
+import { addProductAPI, deleteProductAPI, DeleteUserAPI, getProductAPI, updateProductAPI, UpdateUserAPI, UserListAPI, UserLoginAPI, userLogoutAPI, UserRegisterAPI, UserVerifiedLoginAPI } from "../../API/UserAPICall";
 
 // Add User Controller
 export const addUserController = createAsyncThunk("addUserController", async (data) => {
@@ -144,11 +144,53 @@ export const getProductController = createAsyncThunk("getProductController", asy
     }
 })
 
+// Delete Product Controller
+export const deleteProductController = createAsyncThunk("deleteProductController", async (data) => {
+
+    try {
+        const response = await deleteProductAPI(data);
+        console.log("response", response);
+
+        if (response.status === 200) {
+            toast.success("Product Deleted Successfully");
+            return response.data;
+        } else {
+            toast.error(response.response.data.error);
+        }
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+})
+
+// Update Product Controller
+export const updateProductController = createAsyncThunk("updateProductController", async (data) => {
+
+    try {
+        const response = await updateProductAPI(data);
+        console.log("response", response);
+
+        if (response.status === 201) {
+            toast.success("User Updated Successfully");
+            return response.data;
+        } else {
+            toast.error(response.response.data.error);
+        }
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+})
+
+
+
 
 // create reducers and actions
 export const UserSlice = createSlice({
     name: "UserSlice",
     initialState: {
+
+        // user
         addUserSlice: [],
         getUserListSlice: [],
         loginUserSlice: [],
@@ -161,6 +203,9 @@ export const UserSlice = createSlice({
         // product 
         addProductSlice: [],
         getProductSlice: [],
+        deleteProductSlice: [],
+        updateProductSlice: [],
+
         loading: false,
         error: null
     },
@@ -191,6 +236,33 @@ export const UserSlice = createSlice({
             .addCase(getProductController.fulfilled, (state, action) => {
                 state.loading = false;
                 state.getProductSlice = action.payload;
+            })
+
+
+            // DELETE Product
+            .addCase(deleteProductController.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(deleteProductController.rejected, (state, action) => {
+                state.loading = false,
+                    state.error = action;
+            })
+            .addCase(deleteProductController.fulfilled, (state, action) => {
+                state.loading = false;
+                state.deleteProductSlice = action.payload;
+            })
+
+            // UPDATE Product
+            .addCase(updateProductController.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(updateProductController.rejected, (state, action) => {
+                state.loading = false,
+                    state.error = action;
+            })
+            .addCase(updateProductController.fulfilled, (state, action) => {
+                state.loading = false;
+                state.updateProductSlice = action.payload;
             })
 
 

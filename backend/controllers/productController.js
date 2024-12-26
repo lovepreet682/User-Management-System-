@@ -39,7 +39,7 @@ exports.getAllProductController = async (req, res) => {
 
 // Delete Product
 exports.deleteProductController = async (req, res) => {
-    const { id } = req.params;
+    const id = req.params.id;
 
     try {
         const deletedProduct = await productModel.findByIdAndDelete(id);
@@ -49,24 +49,31 @@ exports.deleteProductController = async (req, res) => {
         res.status(200).json({ message: 'Product deleted successfully' });
     } catch (error) {
         console.error('Error deleting product:', error);
-        res.status(500).json({ message: 'Error deleting  product', error });
+        res.status(500).json({ message: 'Error deleting product', error: error.message });
     }
 }
+
 
 // update Product
 exports.updateProductController = async (req, res) => {
     const { id } = req.params;
-    const { productDescription, productName, productPrice, productImg } = req.body;
+    const { productDescription, productName, productPrice } = req.body;
+
+
+    // File upload path
+    const file = req.file?.path;
+    const upload = await cloudinary.uploader.upload(file);
+
     try {
         const updatedProducts = {
-            productDescription, productName, productPrice, productImg
+            productDescription, productName, productPrice, productImg: upload.secure_url
         };
 
         const updateProducts = await userModel.findByIdAndUpdate(id, updatedProducts, { new: true });
         if (!updateProducts) {
             return res.status(404).json({ message: 'Product not found' });
         }
-        res.status(200).json({ message: 'Product updated successfully', user: updateProducts });
+        res.status(200).json({ message: 'Product updated successfully', product: updateProducts });
     } catch (error) {
         console.error('Error updating product:', error);
         res.status(500).json({ message: 'Error updating product', error });

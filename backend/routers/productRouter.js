@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/product", userVerifyMiddleware, userUpload.single('productImg'), addProductController);
 router.get("/product", userVerifyMiddleware, getAllProductController);
-router.get("/product/:id", userVerifyMiddleware, deleteProductController);
-router.delete("/product/:id", userVerifyMiddleware, updateProductController);
+router.delete("/product/:id", userVerifyMiddleware, deleteProductController);
+router.put("/product/:id", userVerifyMiddleware, updateProductController);
 
 module.exports = router;

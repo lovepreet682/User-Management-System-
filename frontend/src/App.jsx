@@ -10,6 +10,7 @@ import AddProduct from './component/Product/AddProduct'
 import UserList from './component/User/UserList'
 import UserRole from './component/User/UserRole'
 import ChangeProfile from './component/User/ChangeProfile'
+import ProductList from './component/Product/ProductList'
 function App() {
   return (
     <>
@@ -22,6 +23,8 @@ function App() {
         <Route path='/users' element={<Layout><UserList /></Layout>} />
         <Route path='/role' element={<Layout><UserRole /></Layout>} />
         <Route path='/changeprofile' element={<Layout><ChangeProfile /></Layout>} />
+        <Route path='/productlist' element={<Layout><ProductList /></Layout>} />
+
 
 
       </Routes>

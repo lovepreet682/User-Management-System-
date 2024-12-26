@@ -159,6 +159,12 @@ p a:hover {
   text-overflow: ellipsis;
 }
 
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @media (max-width: 800px) {
   nav {
     overflow: hidden;

@@ -4,7 +4,7 @@ import { updateUserController, userVerifyController } from '../../Redux/Slice/Us
 
 function ChangeProfile() {
     const dispatch = useDispatch();
-    const { userVerifySlice, loginUserSlice } = useSelector((state) => state.User);
+    const { loginUserSlice } = useSelector((state) => state.User);
     const [inputUser, setInputUser] = useState({ name: '', email: '', id: "" });
 
     useEffect(() => {

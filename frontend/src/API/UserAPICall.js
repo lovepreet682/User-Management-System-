@@ -40,8 +40,6 @@ export const DeleteUserAPI = async (data, header) => {
 
 
 
-
-
 // ----------- PRODUCT LIST ----------------------------
 
 // Add Product || POST
@@ -52,4 +50,14 @@ export const addProductAPI = async (data, header) => {
 // GET Product || GET
 export const getProductAPI = async (data, header) => {
     return await commonrequest("GET", `${BASE_URL}${product}`, "", header);
+}
+
+// DELETE Product || DELETE
+export const deleteProductAPI = async (data, header) => {
+    return await commonrequest("DELETE", `${BASE_URL}${product}/${data.id}`, {}, header);
+}
+
+// GET Product || GET
+export const updateProductAPI = async (data, header) => {
+    return await commonrequest("PUT", `${BASE_URL}${product}/${data.productID.id}`, data, header);
 }
