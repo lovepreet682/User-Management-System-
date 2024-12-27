@@ -5,6 +5,8 @@ export const Login_URL = "/login";
 export const USER_URL = "/user";
 export const User_Update = "/user";
 export const User_UpdateAdmin = "/useradmin";
+export const UserChangePassword_URL = "/changepassword";
+
 
 export const LOGOUT_URL = "/logout";
 export const VerifyUser_URL = "/userVerify";

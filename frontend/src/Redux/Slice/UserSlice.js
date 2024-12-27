@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
-import { addProductAPI, deleteProductAPI, DeleteUserAPI, getProductAPI, updateProductAPI, UpdateUserAdminSideAPI, UpdateUserAPI, UserListAPI, UserLoginAPI, userLogoutAPI, UserRegisterAPI, UserVerifiedLoginAPI } from "../../API/UserAPICall";
+import { addProductAPI, changeuserPasswordAPI, deleteProductAPI, DeleteUserAPI, getProductAPI, updateProductAPI, UpdateUserAdminSideAPI, UpdateUserAPI, UserListAPI, UserLoginAPI, userLogoutAPI, UserRegisterAPI, UserVerifiedLoginAPI } from "../../API/UserAPICall";
 
 // Add User Controller
 export const addUserController = createAsyncThunk("addUserController", async (data) => {
@@ -130,6 +130,22 @@ export const getUserListController = createAsyncThunk("getUserListController", a
     }
 })
 
+// Change User Password
+export const changeUserPasswordController = createAsyncThunk("changeUserPasswordController", async (data) => {
+    try {
+        const response = await changeuserPasswordAPI(data);
+        if (response.status === 200) {
+            toast.success("User Password Changed Successfully");
+            return response.data;
+        } else {
+            toast.error(response.response.data.error);
+        }
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+})
+
 // ------------------------------------- PRODUCT------------------------------------------
 
 // Add Product 
@@ -211,6 +227,7 @@ export const UserSlice = createSlice({
         updateUserSlice: [],
         deleteUserSlice: [],
         updateUserAdminSlice: [],
+        changeUserPasswordSlice: [],
 
 
         // product 
@@ -381,6 +398,20 @@ export const UserSlice = createSlice({
             .addCase(userVerifyController.fulfilled, (state, action) => {
                 state.loading = false;
                 state.userVerifySlice = [action.payload];
+            })
+
+
+            // Change User Password
+            .addCase(changeUserPasswordController.pending, (state) => {
+                state.status = true
+            })
+            .addCase(changeUserPasswordController.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(changeUserPasswordController.fulfilled, (state, action) => {
+                state.loading = false;
+                state.changeUserPasswordSlice = action.payload;
             })
     }
 })

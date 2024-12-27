@@ -11,6 +11,7 @@ import UserList from './component/User/UserList'
 import UserRole from './component/User/UserRole'
 import ChangeProfile from './component/User/ChangeProfile'
 import ProductList from './component/Product/ProductList'
+import ChangePassword from './component/User/ChangePassword'
 function App() {
   return (
     <>
@@ -24,6 +25,7 @@ function App() {
         <Route path='/role' element={<Layout><UserRole /></Layout>} />
         <Route path='/changeprofile' element={<Layout><ChangeProfile /></Layout>} />
         <Route path='/productlist' element={<Layout><ProductList /></Layout>} />
+        <Route path='/changepassword' element={<Layout><ChangePassword /></Layout>} />
 
 
 

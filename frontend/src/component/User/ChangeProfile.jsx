@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateUserController, userVerifyController } from '../../Redux/Slice/UserSlice';
+import { Link } from 'react-router-dom';
 
 function ChangeProfile() {
     const dispatch = useDispatch();
@@ -70,10 +71,16 @@ function ChangeProfile() {
                                 placeholder="Enter Your Email Address" />
                         </div>
                         <button className="btn btn-primary btn1" onClick={handleUpdateUser}>Change Profile</button>
-
+                        <div className='text-center my-2' style={{ fontWeight: "500" }}>
+                            OR
+                        </div>
+                        <Link to='/changepassword' className="btn btn-primary btn1" >Change Password</Link>
                     </form>
                 </div>
             </section>
+
+
+
         </>
     )
 }
