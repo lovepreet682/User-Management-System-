@@ -5,9 +5,11 @@ import FooterSection from './FooterSection'
 function Layout({ children }) {
     return (
         <>
-            <HeaderSection />
-            {children}
-            <FooterSection />
+            <div className="layout-container">
+                <HeaderSection />
+                <main className="layout-content">{children}</main>
+                <FooterSection />
+            </div>
 
         </>
     )

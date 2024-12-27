@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { deleteProductController, deleteUserController, getUserListController } from '../../Redux/Slice/UserSlice';
 import { Button, Modal } from 'react-bootstrap';
 import UpdateUserData from './UpdateUserData';
+import Pagination from 'react-bootstrap/Pagination';
+import PaginatedTable from '../Pagination/PaginatedTable';
 
 function UserList() {
     const dispatch = useDispatch();
@@ -51,10 +53,11 @@ function UserList() {
         setInputValue({ id, name, email, userRole })
 
     }
+
     return (
         <>
-            <div className="container pt-3">
-                <h5 className='text-center mb-2'>User List</h5>
+            <div className="container pt-3" >
+                <h5 className='text-center'>User List</h5>
                 <table class="table text-center">
                     <thead>
                         <tr className='table-dark'>
@@ -67,40 +70,60 @@ function UserList() {
                         </tr>
                     </thead>
                     <tbody>
-                        {loading ? <>
-                            <div className="text-center">
-                                <div className="spinner-border" role="status">
-                                    <span className="visually-hidden">Loading...</span>
-                                </div>
-                            </div>
-                        </> : <>
-                            {getUserListSlice?.users?.length > 0 ? <>
-                                {getUserListSlice?.users?.map((user, index) => (
-                                    <>
+                        {loading ? (
+                            <tr>
+                                <td colSpan="6" className="text-center">
+                                    <div className="spinner-border" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        ) : (
+                            <PaginatedTable
+                                data={getUserListSlice?.users || []}
+                                itemsPerPage={5}
+                                renderRows={(users) =>
+                                    users.length > 0 ? (
+                                        users.map((user, index) => (
+                                            <tr key={user._id}>
+                                                <td>{index + 1}</td>
+                                                <td>{user.name}</td>
+                                                <td>{user.email}</td>
+                                                <td>{user.userRole}</td>
+                                                <td>
+                                                    <img src={user.userProfile} style={{ width: "35px" }} alt="profile" />
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        className="btn btn-danger"
+                                                        onClick={() => handleDeleteModals(user._id)}
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                    <button
+                                                        className="btn btn-success mx-2"
+                                                        onClick={() =>
+                                                            handleOpenModals(user._id, user.name, user.email, user.userRole)
+                                                        }
+                                                    >
+                                                        Update
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
                                         <tr>
-                                            <td>{index + 1}</td>
-                                            <td>{user.name}</td>
-                                            <td>{user.email}</td>
-                                            <td>{user.userRole}</td>
-                                            <td><img src={user.userProfile} style={{ width: "35px" }} /></td>
-                                            <td>
-                                                <button className='btn btn-danger' onClick={() => { handleDeleteModals(user._id) }}>Delete</button>
-                                                <button className='btn btn-success mx-2' onClick={() => handleOpenModals(user._id, user.name, user.email, user.userRole)}>Update</button>
+                                            <td colSpan="6" className="text-center">
+                                                No User available to display.
                                             </td>
                                         </tr>
-                                    </>
-                                ))}
-                            </> : <>
-                                <div className="text-center">
-                                    <p>No User available to display.</p>
-                                </div>
-                            </>}
-                        </>}
-
-
+                                    )
+                                }
+                            />
+                        )}
                     </tbody>
                 </table>
-            </div>
+            </div >
 
             <UpdateUserData showUpdateModal={showUpdateModal} handleUpdateClose={handleUpdateClose} inputValue={inputValue} setInputValue={setInputValue} />
 
