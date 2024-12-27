@@ -50,9 +50,6 @@ function UpdatProductModal({ show, handleClose, inputValue, setInputValue }) {
                 data, config, productID
             }
 
-            console.log("sendData", sendData);
-
-
             // Send the request
             dispatch(updateProductController(sendData)).then((res) => {
                 if (res?.payload) {

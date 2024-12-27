@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { addUserController } from '../../Redux/Slice/UserSlice';
 
 function Register() {
+    const { loading } = useSelector((state) => state.User);
     const navigate = useNavigate("");
     const dispatch = useDispatch();
 
     const [passShow, setPassShow] = useState(false);
     const [image, setImage] = useState("");
     const [inputValue, setInputValue] = useState({
-        email: "", password: "", name: "", userProfile: "", userRole: ""
+        email: "", password: "", name: "", userProfile: ""
     })
 
 
@@ -30,8 +31,8 @@ function Register() {
     const handleSubmit = (e) => {
         e.preventDefault();
         try {
-            if (!inputValue.name || !inputValue.email || !inputValue.password || !inputValue.userRole) {
-                setError("All fields are required.");
+            if (!inputValue.name || !inputValue.email || !inputValue.password) {
+                alert("All fields are required.");
                 return;
             }
 
@@ -45,7 +46,6 @@ function Register() {
                 data.append("name", inputValue.name);
                 data.append("email", inputValue.email);
                 data.append("password", inputValue.password);
-                data.append("userRole", inputValue.userRole);
                 data.append("userProfile", image);
 
                 const config = {
@@ -99,7 +99,7 @@ function Register() {
                                 placeholder="Add Your Profile" />
                         </div>
 
-                        <div className="form-input">
+                        {/* <div className="form-input">
                             <label htmlFor="email" style={{ fontWeight: "bold" }}>Select Role</label>
                             <select name="userRole" id="" onChange={handleChange} className='form-select' value={inputValue.userRole}>
                                 <option selected>Choose Category</option>
@@ -107,7 +107,7 @@ function Register() {
                                 <option value="Admin">Admin</option>
                                 <option value="User">User</option>
                             </select>
-                        </div>
+                        </div> */}
 
                         <div className="form-input">
                             <label htmlFor="password" style={{ fontWeight: "bold" }}>Password</label>
@@ -120,8 +120,16 @@ function Register() {
                                 </div>
                             </div>
                         </div>
+                        {loading ? <>
+                            <div className="text-center">
+                                <div className="spinner-border" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </> : <>
 
-                        <button className="btn btn-primary btn1" onClick={handleSubmit}>Register</button>
+                            <button className="btn btn-primary btn1" onClick={handleSubmit}>Register</button>
+                        </>}
 
                         <p>
                             Don't have an Account? <NavLink to="/">Sign In</NavLink>

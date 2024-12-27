@@ -2,19 +2,24 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteProductController, deleteUserController, getUserListController } from '../../Redux/Slice/UserSlice';
 import { Button, Modal } from 'react-bootstrap';
+import UpdateUserData from './UpdateUserData';
 
 function UserList() {
     const dispatch = useDispatch();
     const { getUserListSlice, loading } = useSelector((state) => state.User);
     const [deleteUserID, setDeleteUserID] = useState('');
     const [show, setShow] = useState(false);
+    const [showUpdateModal, setShowUpdateModal] = useState(false);
+    const [inputValue, setInputValue] = useState({
+        email: "", password: "", name: "", userRole: ""
+    })
     const handleClose = () => { setShow(false) };
+    const handleUpdateClose = () => { setShowUpdateModal(false), userList() };
+
 
     const userList = () => {
         dispatch(getUserListController());
     }
-
-    console.log("getUserListSlice", getUserListSlice);
 
     useEffect(() => {
         userList();
@@ -22,8 +27,6 @@ function UserList() {
 
     // handle Set user ID
     const handleDeleteModals = (id) => {
-        console.log("################", id);
-
         setShow(true);
         setDeleteUserID(id);
     }
@@ -41,6 +44,12 @@ function UserList() {
         }).catch((err) => {
             console.log(err);
         });
+    }
+
+    const handleOpenModals = (id, name, email, userRole) => {
+        setShowUpdateModal(true);
+        setInputValue({ id, name, email, userRole })
+
     }
     return (
         <>
@@ -76,7 +85,7 @@ function UserList() {
                                             <td><img src={user.userProfile} style={{ width: "35px" }} /></td>
                                             <td>
                                                 <button className='btn btn-danger' onClick={() => { handleDeleteModals(user._id) }}>Delete</button>
-                                                <button className='btn btn-success mx-2'>Update</button>
+                                                <button className='btn btn-success mx-2' onClick={() => handleOpenModals(user._id, user.name, user.email, user.userRole)}>Update</button>
                                             </td>
                                         </tr>
                                     </>
@@ -92,6 +101,8 @@ function UserList() {
                     </tbody>
                 </table>
             </div>
+
+            <UpdateUserData showUpdateModal={showUpdateModal} handleUpdateClose={handleUpdateClose} inputValue={inputValue} setInputValue={setInputValue} />
 
             {/* Delete User Profile */}
             <Modal show={show} onHide={handleClose}>

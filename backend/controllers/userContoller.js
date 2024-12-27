@@ -4,10 +4,10 @@ const cloudinary = require("../cloudinary/cloudinarConfig")
 
 // Add User
 exports.addUserController = async (req, res) => {
-    const { name, email, userRole, password } = req.body;
+    const { name, email, password } = req.body;
 
     // Validate required fields
-    if (!name || !email || !password || !userRole) {
+    if (!name || !email || !password) {
         return res.status(400).json({ error: "All fields are required" });
     }
 
@@ -29,7 +29,7 @@ exports.addUserController = async (req, res) => {
         // Create new user
         const newUser = new userModel({
             name, email, userProfile: upload.secure_url,
-            userRole, password: hashedPassword,
+            password: hashedPassword,
         });
 
         await newUser.save();
@@ -149,3 +149,23 @@ exports.updateUserController = async (req, res) => {
     }
 };
 
+
+
+// Update User Admin Side
+exports.updateUserAdminSideController = async (req, res) => {
+    const { id } = req.params;
+    const { name, email, userRole } = req.body;
+
+    try {
+        const updatedFields = { name, email, userRole };
+
+        const updatedUser = await userModel.findByIdAndUpdate(id, updatedFields, { new: true });
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json({ message: 'User updated successfully', user: updatedUser });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).json({ message: 'Error updating user', error });
+    }
+};

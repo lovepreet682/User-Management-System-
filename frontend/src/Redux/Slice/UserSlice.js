@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
-import { addProductAPI, deleteProductAPI, DeleteUserAPI, getProductAPI, updateProductAPI, UpdateUserAPI, UserListAPI, UserLoginAPI, userLogoutAPI, UserRegisterAPI, UserVerifiedLoginAPI } from "../../API/UserAPICall";
+import { addProductAPI, deleteProductAPI, DeleteUserAPI, getProductAPI, updateProductAPI, UpdateUserAdminSideAPI, UpdateUserAPI, UserListAPI, UserLoginAPI, userLogoutAPI, UserRegisterAPI, UserVerifiedLoginAPI } from "../../API/UserAPICall";
 
 // Add User Controller
 export const addUserController = createAsyncThunk("addUserController", async (data) => {
@@ -40,10 +40,24 @@ export const updateUserController = createAsyncThunk("updateUserController", asy
 export const deleteUserController = createAsyncThunk("deleteUserController", async (data) => {
     try {
         const response = await DeleteUserAPI(data);
-        console.log("3456765435678", response);
-
         if (response.status === 200) {
             toast.success("User Deleted Successfully");
+            return response.data;
+        } else {
+            toast.error(response.response.data.error);
+        }
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+})
+
+// Update User Admin Side Controller
+export const updateUserAdminSideController = createAsyncThunk("updateUserAdminSideController", async (data) => {
+    try {
+        const response = await UpdateUserAdminSideAPI(data);
+        if (response.status === 200) {
+            toast.success("User Updated Successfully");
             return response.data;
         } else {
             toast.error(response.response.data.error);
@@ -168,8 +182,6 @@ export const updateProductController = createAsyncThunk("updateProductController
 
     try {
         const response = await updateProductAPI(data);
-        console.log("response", response);
-
         if (response.status === 201) {
             toast.success("User Updated Successfully");
             return response.data;
@@ -198,6 +210,7 @@ export const UserSlice = createSlice({
         userVerifySlice: [],
         updateUserSlice: [],
         deleteUserSlice: [],
+        updateUserAdminSlice: [],
 
 
         // product 
@@ -265,6 +278,18 @@ export const UserSlice = createSlice({
                 state.updateProductSlice = action.payload;
             })
 
+            // Update User Admin Side
+            .addCase(updateUserAdminSideController.pending, (state) => {
+                state.status = true
+            })
+            .addCase(updateUserAdminSideController.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(updateUserAdminSideController.fulfilled, (state, action) => {
+                state.loading = false;
+                state.updateUserAdminSlice = action.payload;
+            })
 
             // Add User
             .addCase(addUserController.pending, (state) => {
