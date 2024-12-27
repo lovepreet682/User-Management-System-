@@ -13,7 +13,7 @@
 .layout-content {
   flex: 1;
   margin: 20px;
-  padding-bottom: 50px; 
+  padding-bottom: 50px;
 }
 
 /* flex: 1 allows the main content area to grow and take up remaining space between the header and footer. */

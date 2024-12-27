@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteProductController, getProductController } from '../../Redux/Slice/UserSlice';
 import UpdatProductModal from './UpdatProductModal';
 import { Button, Modal } from 'react-bootstrap';
+import PaginatedTable from '../Pagination/PaginatedTable';
 
 function ProductList() {
     const dispatch = useDispatch();
@@ -61,12 +62,11 @@ function ProductList() {
                     <table className="table text-center">
                         <thead>
                             <tr className='table-dark'>
-                                <th scope="col" style={{ whiteSpace: "nowrap" }}>Sr No.</th>
                                 <th scope="col">Product ID</th>
                                 <th scope="col">Product Name</th>
                                 <th scope="col">Product Description</th>
-                                <th scope="col">Product Image</th>
-                                <th scope="col">Product Price</th>
+                                <th scope="col" style={{ textWrap: "nowrap" }}>Product Image</th>
+                                <th scope="col" style={{ textWrap: "nowrap" }}>Product Price</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -76,24 +76,34 @@ function ProductList() {
                                     <span className="visually-hidden">Loading...</span>
                                 </div>
                             </div> : <>
-                                {getProductSlice?.getAllProduct?.length > 0 ? <>
-                                    {getProductSlice?.getAllProduct?.map((product, index) => (
-                                        <tr key={product._id}>
-                                            <td>{index + 1}</td>
-                                            <td>{product._id}</td>
-                                            <td className="truncate" style={{ maxWidth: "200px" }}>{product.productName}</td>
-                                            <td className="truncate" style={{ maxWidth: "200px" }}>{product.productDescription}</td>
-                                            <td><img src={product.productImg} style={{ width: "35px", height: "35px", objectFit: "cover" }} alt={product.productName} /></td>
-                                            <td>{product.productPrice}</td>
-                                            <td>
-                                                <button className='btn btn-danger' onClick={() => handleDeleteModals(product._id)}>Delete</button>
-                                                <button className='btn btn-success mx-2' onClick={() => handleUpdateShow(product._id, product.productName, product.productCategory, product.productDescription, product.productImg, product.productPrice)}>Update</button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </> : <div className="text-center">
-                                    <p>No Product available to display.</p>
-                                </div>}
+                                <PaginatedTable
+                                    data={getProductSlice?.getAllProduct || []}
+                                    itemsPerPage={5}
+                                    renderRows={(currentData, currentPage, itemsPerPage) =>
+                                        currentData?.length > 0 ? (
+                                            currentData?.map((product, index) => (
+                                                <tr key={product._id}>
+                                                    <td>{product._id}</td>
+                                                    <td className="truncate" style={{ maxWidth: "200px" }}>{product.productName}</td>
+                                                    <td className="truncate" style={{ maxWidth: "180px" }}>{product.productDescription}</td>
+                                                    <td><img src={product.productImg} style={{ width: "35px", height: "35px", objectFit: "cover" }} alt={product.productName} /></td>
+                                                    <td>{product.productPrice}</td>
+                                                    <td className='d-flex'>
+                                                        <button className='btn btn-danger' onClick={() => handleDeleteModals(product._id)}>Delete</button>
+                                                        <button className='btn btn-success mx-2' onClick={() => handleUpdateShow(product._id, product.productName, product.productCategory, product.productDescription, product.productImg, product.productPrice)}>Update</button>
+                                                    </td>
+                                                </tr>
+                                            )))
+                                            : (
+                                                <tr>
+                                                    <td colSpan="6" className="text-center">
+                                                        No Product available to display.
+                                                    </td>
+                                                </tr>
+                                            )
+                                    }
+                                />
+
                             </>}
                         </tbody>
                     </table>

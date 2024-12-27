@@ -82,11 +82,11 @@ function UserList() {
                             <PaginatedTable
                                 data={getUserListSlice?.users || []}
                                 itemsPerPage={5}
-                                renderRows={(users) =>
-                                    users.length > 0 ? (
-                                        users.map((user, index) => (
+                                renderRows={(currentData, currentPage, itemsPerPage) =>
+                                    currentData.length > 0 ? (
+                                        currentData.map((user, index) => (
                                             <tr key={user._id}>
-                                                <td>{index + 1}</td>
+                                                <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
                                                 <td>{user.name}</td>
                                                 <td>{user.email}</td>
                                                 <td>{user.userRole}</td>
