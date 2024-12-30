@@ -93,7 +93,7 @@ export const logutController = createAsyncThunk("logutController", async (thunkA
         const response = await userLogoutAPI();
         if (response.status === 200) {
             localStorage.removeItem("usertoken");
-            toast.success("user Logout Successfully");
+            toast.success("User Logout Successfully");
             return response.data;
         }
     } catch (error) {
