@@ -13,12 +13,18 @@ import ChangeProfile from './component/User/ChangeProfile'
 import ProductList from './component/Product/ProductList'
 import ChangePassword from './component/User/ChangePassword'
 import UserProtected from './component/Protected/UserProtected'
+import ForgetPassword from './component/User/ForgetPassword'
+import ResetPassword from './component/User/ResetPassword'
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgetpassword" element={<ForgetPassword />} />
+        <Route path="/resetpassword/:userId/:token" element={<ResetPassword />} />
+
+
         <Route path="/home" element={<Layout><UserProtected Components={Dashboard} /></Layout>} />
         <Route path="/product" element={<Layout><UserProtected Components={GetProductList} /></Layout>} />
         <Route path="/addproduct" element={<Layout><UserProtected Components={AddProduct} /></Layout>} />
@@ -27,6 +33,7 @@ function App() {
         <Route path="/changeprofile" element={<Layout><UserProtected Components={ChangeProfile} /></Layout>} />
         <Route path="/productlist" element={<Layout><UserProtected Components={ProductList} /></Layout>} />
         <Route path="/changepassword" element={<Layout><UserProtected Components={ChangePassword} /></Layout>} />
+
       </Routes>
       <Toaster />
     </>

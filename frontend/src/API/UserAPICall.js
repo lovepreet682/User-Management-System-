@@ -1,4 +1,4 @@
-import { BASE_URL, Login_URL, LOGOUT_URL, product, User_Update, User_UpdateAdmin, USER_URL, UserChangePassword_URL, VerifyUser_URL } from "./API_URL";
+import { BASE_URL, forgetPasswordURL, Login_URL, LOGOUT_URL, product, resetPasswordURL, User_UpdateAdmin, USER_URL, UserChangePassword_URL, VerifyUser_URL } from "./API_URL";
 import { commonrequest } from "./CommonRequest";
 
 // Add User API || POST
@@ -50,6 +50,19 @@ export const changeuserPasswordAPI = async (data, header) => {
 }
 
 
+// FORGET PASSWORD || POST
+export const forgetPasswordAPI = async (data, header) => {
+    return await commonrequest("POST", `${BASE_URL}${forgetPasswordURL}`, { "email": data }, header);
+}
+
+// RESET PASSWORD || POST
+export const resetPasswordAPI = async (data, header) => {
+    const resetPassword = `${resetPasswordURL}/${data.userId}/${data.token}`;
+    return await commonrequest("POST", `${BASE_URL}${resetPassword}`, data, header);
+}
+
+
+
 // ----------- PRODUCT LIST ----------------------------
 
 // Add Product || POST
@@ -64,8 +77,6 @@ export const getProductAPI = async (data, header) => {
 
 // DELETE Product || DELETE
 export const deleteProductAPI = async (data, header) => {
-    console.log("dat@@@@@@@@@@@@@@@", data);
-
     return await commonrequest("DELETE", `${BASE_URL}${product}/${data.id}`, {}, header);
 }
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { addUserController } from '../../Redux/Slice/UserSlice';
+import toast from 'react-hot-toast';
 
 function Register() {
     const { loading } = useSelector((state) => state.User);
@@ -31,8 +32,8 @@ function Register() {
     const handleSubmit = (e) => {
         e.preventDefault();
         try {
-            if (!inputValue.name || !inputValue.email || !inputValue.password) {
-                alert("All fields are required.");
+            if (!inputValue.name.trim() || !inputValue.email.trim() || !inputValue.password.trim) {
+                toast.error("All fields are required.");
                 return;
             }
 

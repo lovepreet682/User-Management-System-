@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { changeUserPasswordController } from '../../Redux/Slice/UserSlice';
+import toast from 'react-hot-toast';
 
 function ChangePassword() {
     const dispatch = useDispatch();
@@ -15,6 +16,14 @@ function ChangePassword() {
     // Handle Submit
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (inputUser.currentPassword.trim() === "") {
+            toast.error("Current password fields is empty");
+        } else if (inputUser.newPassword.trim() === "") {
+            toast.error("New password fields is empty");
+        } else if (inputUser.confirmPassword.trim() === "") {
+            toast.error("Confirm password fields is empty");
+        }
         try {
             dispatch(changeUserPasswordController(inputUser)).then((result) => {
                 if (result?.payload) {

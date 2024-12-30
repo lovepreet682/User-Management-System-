@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
-import { addProductAPI, changeuserPasswordAPI, deleteProductAPI, DeleteUserAPI, getProductAPI, updateProductAPI, UpdateUserAdminSideAPI, UpdateUserAPI, UserListAPI, UserLoginAPI, userLogoutAPI, UserRegisterAPI, UserVerifiedLoginAPI } from "../../API/UserAPICall";
+import { addProductAPI, changeuserPasswordAPI, deleteProductAPI, DeleteUserAPI, forgetPasswordAPI, getProductAPI, resetPasswordAPI, updateProductAPI, UpdateUserAdminSideAPI, UpdateUserAPI, UserListAPI, UserLoginAPI, userLogoutAPI, UserRegisterAPI, UserVerifiedLoginAPI } from "../../API/UserAPICall";
 
 // Add User Controller
 export const addUserController = createAsyncThunk("addUserController", async (data) => {
@@ -138,7 +138,43 @@ export const changeUserPasswordController = createAsyncThunk("changeUserPassword
             toast.success("User Password Changed Successfully");
             return response.data;
         } else {
-            toast.error(response.response.data.error);
+            toast.error(response.data.error);
+        }
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+})
+
+
+// Forget Password------>
+export const forgetPasswordController = createAsyncThunk("forgetPasswordController", async (data) => {
+    console.log("data", data);
+
+    try {
+        const response = await forgetPasswordAPI(data);
+        if (response.status === 200) {
+            toast.success("Password reset email sent successfully");
+            return response.data;
+        } else {
+            toast.error(response.data.error);
+        }
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+})
+
+
+// Reset Password------>
+export const resetPasswordController = createAsyncThunk("resetPasswordController", async (data) => {
+    try {
+        const response = await resetPasswordAPI(data);
+        if (response.status === 200) {
+            toast.success("Password reset successfully");
+            return response.data;
+        } else {
+            toast.error(response.data.error);
         }
     } catch (error) {
         console.log(error);
@@ -228,6 +264,8 @@ export const UserSlice = createSlice({
         deleteUserSlice: [],
         updateUserAdminSlice: [],
         changeUserPasswordSlice: [],
+        forgetPasswordSlice: [],
+        resetPasswordSlice: [],
 
 
         // product 
@@ -297,7 +335,7 @@ export const UserSlice = createSlice({
 
             // Update User Admin Side
             .addCase(updateUserAdminSideController.pending, (state) => {
-                state.status = true
+                state.loading = true
             })
             .addCase(updateUserAdminSideController.rejected, (state, action) => {
                 state.loading = false;
@@ -310,7 +348,7 @@ export const UserSlice = createSlice({
 
             // Add User
             .addCase(addUserController.pending, (state) => {
-                state.status = true
+                state.loading = true
             })
             .addCase(addUserController.rejected, (state, action) => {
                 state.loading = false;
@@ -336,7 +374,7 @@ export const UserSlice = createSlice({
 
             // Update User
             .addCase(updateUserController.pending, (state) => {
-                state.status = true
+                state.loading = true
             })
             .addCase(updateUserController.rejected, (state, action) => {
                 state.loading = false;
@@ -349,7 +387,7 @@ export const UserSlice = createSlice({
 
             // Delete User
             .addCase(deleteUserController.pending, (state) => {
-                state.status = true
+                state.loading = true
             })
             .addCase(deleteUserController.rejected, (state, action) => {
                 state.loading = false;
@@ -362,7 +400,7 @@ export const UserSlice = createSlice({
 
             // Login User
             .addCase(loginUserController.pending, (state) => {
-                state.status = true
+                state.loading = true
             })
             .addCase(loginUserController.rejected, (state, action) => {
                 state.loading = false;
@@ -375,7 +413,7 @@ export const UserSlice = createSlice({
 
             // Logout user
             .addCase(logutController.pending, (state) => {
-                state.status = true
+                state.loading = true
             })
             .addCase(logutController.rejected, (state, action) => {
                 state.loading = false;
@@ -389,7 +427,7 @@ export const UserSlice = createSlice({
 
             // Verify user
             .addCase(userVerifyController.pending, (state) => {
-                state.status = true
+                state.loading = true
             })
             .addCase(userVerifyController.rejected, (state, action) => {
                 state.loading = false;
@@ -403,7 +441,7 @@ export const UserSlice = createSlice({
 
             // Change User Password
             .addCase(changeUserPasswordController.pending, (state) => {
-                state.status = true
+                state.loading = true
             })
             .addCase(changeUserPasswordController.rejected, (state, action) => {
                 state.loading = false;
@@ -412,6 +450,32 @@ export const UserSlice = createSlice({
             .addCase(changeUserPasswordController.fulfilled, (state, action) => {
                 state.loading = false;
                 state.changeUserPasswordSlice = action.payload;
+            })
+
+            // forget Password
+            .addCase(forgetPasswordController.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(forgetPasswordController.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(forgetPasswordController.fulfilled, (state, action) => {
+                state.loading = false;
+                state.forgetPasswordSlice = action.payload;
+            })
+
+            // reset Password
+            .addCase(resetPasswordController.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(resetPasswordController.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(resetPasswordController.fulfilled, (state, action) => {
+                state.loading = false;
+                state.resetPasswordSlice = action.payload;
             })
     }
 })

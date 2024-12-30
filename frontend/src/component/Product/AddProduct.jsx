@@ -60,7 +60,7 @@ function AddProduct() {
                         <div className="row">
                             <div className="col-md-6 col-12 col-lg-6 col-12 col-lg-6 form-input">
                                 <label htmlFor="email" style={{ fontWeight: "bold" }}>Product Image</label>
-                                <input className="form-control"type="file" onChange={handleProductImage} value={inputValue.productImg} name="productImg" placeholder="Enter Your Name" />
+                                <input className="form-control" type="file" onChange={handleProductImage} value={inputValue.productImg} name="productImg" placeholder="Enter Your Name" />
                             </div>
 
                             <div className="col-md-6 col-12 col-lg-6 form-input">

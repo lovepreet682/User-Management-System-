@@ -263,7 +263,6 @@ exports.forgetPasswordController = async (req, res) => {
 // Reset the Password
 exports.resetPasswordController = async (req, res) => {
     const { token } = req.params;
-
     const { newPassword, confirmPassword } = req.body;
 
     try {

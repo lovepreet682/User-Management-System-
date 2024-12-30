@@ -73,7 +73,7 @@ function Login() {
 
                         <p>
                             Forgot Password?{' '}
-                            <NavLink to="/forgotpassword">Click Here</NavLink>
+                            <NavLink to="/forgetpassword">Click Here</NavLink>
                         </p>
                     </form>
                 </div>
