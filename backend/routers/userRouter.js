@@ -1,5 +1,5 @@
 const express = require('express');
-const { addUserController, updateUserController, deleteUserController, getUserController, loginController, verifyUser, logoutController, updateUserAdminSideController, ChangeUserPasswordController } = require('../controllers/userContoller');
+const { addUserController, updateUserController, deleteUserController, getUserController, loginController, verifyUser, logoutController, updateUserAdminSideController, ChangeUserPasswordController, forgetPasswordController, resetPasswordController } = require('../controllers/userContoller');
 const userUpload = require('../multerConfig/UserImgConfig');
 const userVerifyMiddleware = require('../middleware/userMiddleware');
 const router = express.Router();
@@ -13,9 +13,7 @@ router.delete("/user/:id", userVerifyMiddleware, deleteUserController);
 router.put("/user/:id", userVerifyMiddleware, updateUserController);
 router.put("/useradmin/:id", userVerifyMiddleware, updateUserAdminSideController);
 router.put("/changepassword", userVerifyMiddleware, ChangeUserPasswordController);
-
-
-
-
+router.post("/forgetpassword", forgetPasswordController);
+router.post("/resetpassword/:userId/:token", resetPasswordController);
 
 module.exports = router;

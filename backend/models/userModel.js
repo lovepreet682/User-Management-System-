@@ -30,6 +30,11 @@ const userSchema = new mongoose.Schema({
         }
     }],
 
+    // Forget password
+    verifyToken: {
+        type: String,
+        required: true
+    }
 
 }, { timestamps: true });
 

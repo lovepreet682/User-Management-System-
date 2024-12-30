@@ -1,6 +1,9 @@
 const bcrypt = require('bcrypt');
 const userModel = require('../models/userModel');
-const cloudinary = require("../cloudinary/cloudinarConfig")
+const cloudinary = require("../cloudinary/cloudinarConfig");
+const JWT = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+
 
 // Add User
 exports.addUserController = async (req, res) => {
@@ -204,5 +207,90 @@ exports.ChangeUserPasswordController = async (req, res) => {
     } catch (error) {
         console.error('Error changing user password:', error);
         res.status(500).json({ message: 'Error changing user password', error });
+    }
+}
+
+
+// Forget password
+exports.forgetPasswordController = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        const user = await userModel.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Generate Token 
+        const token = JWT.sign({ _id: user._id }, process.env.USER_SECRET_KEY, { expiresIn: '15m' });
+
+        user.verifyToken = token;
+        await user.save();
+
+        // Create a reset password link
+        const resetLink = `${process.env.FRONT_URL}/resetpassword/${user._id}/${token}`;
+
+        // Configure nodemailer
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
+            },
+        });
+
+        // Email options
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: user.email,
+            subject: 'Password Reset Request',
+            html: `<p>Click the link below to reset your password:</p>
+                   <a href="${resetLink}">${resetLink}</a>
+                <p>This link is valid for 15 Min only.</p>`,
+        };
+
+        // Send email
+        await transporter.sendMail(mailOptions);
+
+        res.status(200).json({ message: 'Password reset email sent successfully' });
+
+    } catch (error) {
+        console.error('Error changing forget password:', error);
+        res.status(500).json({ message: 'Error changing forget password', error });
+    }
+}
+
+// Reset the Password
+exports.resetPasswordController = async (req, res) => {
+    const { token } = req.params;
+
+    const { newPassword, confirmPassword } = req.body;
+
+    try {
+        // Check if the new password and confirm password match
+        if (newPassword !== confirmPassword) {
+            return res.status(400).json({ message: "Passwords do not match" });
+        }
+
+        // Verify token
+        const decoded = JWT.verify(token, process.env.USER_SECRET_KEY);
+
+        const user = await userModel.findById(decoded._id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Hash new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        // Update user password
+        user.password = hashedPassword;
+        await user.save();
+
+        res.status(200).json({ message: 'Password reset successfully' });
+    } catch (error) {
+        console.error('Error resetting password:', error);
+        res.status(500).json({ message: 'Error resetting password', error });
     }
 }
